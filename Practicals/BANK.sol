@@ -23,7 +23,7 @@ contract Bank{
     balance += msg.value;
   }
 
-  function showB() public view return(uint){
+  function showB() public view returns (uint){
     requires (msg.sender == accHolder, "You are not an account holder");
     return balance;
   }

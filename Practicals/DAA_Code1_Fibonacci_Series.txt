@@ -1,0 +1,92 @@
+#include <iostream>
+using namespace std;
+
+void fiboR(int n, int n1 = 0, int n2 = 1){
+    if(n <= 0) return;
+
+    cout << n1 << " ";
+    fiboR(n - 1, n2, n1 + n2);
+}
+
+
+void fiboNR(int n) {
+    int n1 = 0, n2 = 1, n3;
+
+    for(int i = 0; i < n; i++) {
+        cout << n1 << " ";
+        n3 = n1 + n2;
+        n1 = n2;
+        n2 = n3;
+    }
+}
+
+
+int main(){
+    int ch, n;
+    
+    do{
+        cout << "\nMenu\n";
+        cout << "1. Use Recursive Function.\n";
+        cout << "2. Use Non Recursive Function.\n";
+        cout << "3. Exit\n";
+        cout << "Enter Choice: ";
+        cin >> ch;
+        
+        switch(ch){
+            case 1:
+                cout << "Enter no. of elements: ";
+                cin >> n;
+                cout << "Recursive: ";
+                fiboR(n);
+                break;
+            
+            case 2:
+                cout << "Enter no. of elements: ";
+                cin >> n;
+                cout << "Non Recursive: ";
+                fiboNR(n);
+                break;
+            
+            case 3:
+                cout << "Exiting.....";
+                break;
+                
+            default:
+            cout << "Invalid Input!\n Please enter a vaild input.";
+        }
+    }while(ch != 3);
+    
+    return 0;
+}
+
+
+
+
+Menu
+1. Use Recursive Function.
+2. Use Non Recursive Function.
+3. Exit
+Enter Choice: 1
+Enter no. of elements: 7
+Recursive: 0 1 1 2 3 5 8 
+Menu
+1. Use Recursive Function.
+2. Use Non Recursive Function.
+3. Exit
+Enter Choice: 2
+Enter no. of elements: 7
+Non Recursive: 0 1 1 2 3 5 8 
+Menu
+1. Use Recursive Function.
+2. Use Non Recursive Function.
+3. Exit
+Enter Choice: 3
+Exiting.....
+
+=== Code Execution Successful ===
+
+
+
+
+
+

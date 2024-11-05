@@ -1,0 +1,112 @@
+#include <iostream>
+#include <queue>
+#include <unordered_map>
+#include <vector>
+
+using namespace std;
+
+struct HuffmanNode {
+    char ch;
+    int freq;
+    HuffmanNode* left;
+    HuffmanNode* right;
+
+    HuffmanNode(char ch, int freq) {
+        this->ch = ch;
+        this->freq = freq;
+        this->left = this->right = nullptr;
+    }
+};
+
+struct Compare {
+    bool operator()(HuffmanNode* left, HuffmanNode* right) {
+        return left->freq > right->freq;
+    }
+};
+
+void generateCodes(HuffmanNode* root, string code, unordered_map<char, string>& huffmanCode) {
+    if (root == nullptr) return;
+
+    if (!root->left && !root->right) {
+        huffmanCode[root->ch] = code;
+    }
+
+    generateCodes(root->left, code + "0", huffmanCode);
+    generateCodes(root->right, code + "1", huffmanCode);
+}
+
+unordered_map<char, string> huffmanEncoding(const string& text) {
+    unordered_map<char, int> freq;
+    for (char ch : text) {
+        freq[ch]++;
+    }
+
+    priority_queue<HuffmanNode*, vector<HuffmanNode*>, Compare> pq;
+
+    for (auto pair : freq) {
+        pq.push(new HuffmanNode(pair.first, pair.second));
+    }
+
+    while (pq.size() > 1) {
+        HuffmanNode* left = pq.top(); pq.pop();
+        HuffmanNode* right = pq.top(); pq.pop();
+
+        HuffmanNode* node = new HuffmanNode('\0', left->freq + right->freq);
+        node->left = left;
+        node->right = right;
+
+        pq.push(node);
+    }
+
+    HuffmanNode* root = pq.top();
+    unordered_map<char, string> huffmanCode;
+    generateCodes(root, "", huffmanCode);
+
+    return huffmanCode;
+}
+
+void printCodes(const unordered_map<char, string>& huffmanCode) {
+    cout << "Huffman Codes:\n";
+    for (auto pair : huffmanCode) {
+        cout << pair.first << ": " << pair.second << "\n";
+    }
+}
+
+int main() {
+    string text = "huffman encoding example";
+    unordered_map<char, string> huffmanCode = huffmanEncoding(text);
+    printCodes(huffmanCode);
+
+    string encodedString;
+    for (char ch : text) {
+        encodedString += huffmanCode[ch];
+    }
+
+    cout << "\nEncoded String:\n" << encodedString << "\n";
+
+    return 0;
+}
+
+
+
+
+Huffman Codes:
+ : 1111
+u: 11101
+p: 11100
+a: 000
+n: 100
+c: 0010
+o: 0011
+f: 010
+e: 011
+m: 1010
+d: 10110
+i: 10111
+l: 11000
+x: 11001
+h: 11010
+g: 11011
+
+Encoded String:
+1101011101010010101000010011110111000010001110110101111001101111110111100100010101110011000011

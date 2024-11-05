@@ -1,0 +1,115 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class NQueens {
+
+    public static void printSolution(int[][] board, int N) {
+        for (int[] row : board) {
+            for (int cell : row) {
+                System.out.print((cell == 1 ? "Q " : ". "));
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
+    public static boolean isSafe(int[][] board, int row, int col, int N) {
+        for (int i = 0; i < col; i++) {
+            if (board[row][i] == 1) return false;
+        }
+        for (int i = row, j = col; i >= 0 && j >= 0; i--, j--) {
+            if (board[i][j] == 1) return false;
+        }
+        for (int i = row, j = col; i < N && j >= 0; i++, j--) {
+            if (board[i][j] == 1) return false;
+        }
+        return true;
+    }
+
+    public static void solveNQueens(int[][] board, int col, int N, List<int[][]> solutions) {
+        if (col >= N) {
+            solutions.add(cloneBoard(board, N));
+            return;
+        }
+        for (int i = 0; i < N; i++) {
+            if (isSafe(board, i, col, N)) {
+                board[i][col] = 1;
+                solveNQueens(board, col + 1, N, solutions);
+                board[i][col] = 0;
+            }
+        }
+    }
+
+    private static int[][] cloneBoard(int[][] board, int N) {
+        int[][] newBoard = new int[N][N];
+        for (int i = 0; i < N; i++) {
+            System.arraycopy(board[i], 0, newBoard[i], 0, N);
+        }
+        return newBoard;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the value of N (size of the chessboard): ");
+        int N = scanner.nextInt();
+        
+        System.out.print("Enter the row and column index for the first queen (0-based index): ");
+        int row = scanner.nextInt();
+        int col = scanner.nextInt();
+
+        if (row < 0 || row >= N || col < 0 || col >= N) {
+            System.out.println("Invalid position! The row and column must be within the range 0 to " + (N - 1) + ".");
+            return;
+        }
+
+        int[][] board = new int[N][N];
+        board[row][col] = 1; // Placing the first queen at the user-specified position
+
+        List<int[][]> solutions = new ArrayList<>();
+        solveNQueens(board, col + 1, N, solutions);
+
+        System.out.println("All possible solutions with the first queen placed at (" + row + ", " + col + "):");
+        int count = 0;
+        for (int[][] solution : solutions) {
+            count++;
+             System.out.println("Solution " + count + ":");
+             
+            printSolution(solution, N);
+        }
+
+        scanner.close();
+    }
+}
+
+
+
+
+
+java -cp /tmp/vrV36kR1ey/NQueens
+Enter the value of N (size of the chessboard): 5
+Enter the row and column index for the first queen (0-based index): 1 1
+All possible solutions with the first queen placed at (1, 1):
+Solution 1:
+. . . Q . 
+. Q . . . 
+. . . . Q 
+. . Q . . 
+. . . . . 
+
+Solution 2:
+. . . Q . 
+. Q . . . 
+. . . . . 
+. . . . Q 
+. . Q . . 
+
+Solution 3:
+. . . . Q 
+. Q . . . 
+. . . Q . 
+. . . . . 
+. . Q . . 
+
+
+=== Code Execution Successful ===
